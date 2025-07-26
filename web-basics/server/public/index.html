@@ -13,6 +13,7 @@
 
     <!-- defer -> downloads JS first, is executed in the end, non-blocking mode -->
     <script src="script.js" defer></script>
+    <script src="data.js" async></script>
 
     <!-- async -> downloads JS first, is executed as soon as it is downloaded  -->
     <!-- <script src="script.js" defer></script> -->
@@ -21,8 +22,10 @@
     <!-- <script src="script.js"></script> -->
   </head>
   <body>
-    <div id="myElement">hello world</div>
+    <header>Products</header>
     <br />
-    <div id="data"></div>
+    <div class="container">
+      <div id="data"></div>
+    </div>
   </body>
 </html>
