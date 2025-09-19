@@ -13,6 +13,7 @@ function renderData() {
   // convert the data into html and render it on UI
 
   function renderProductListTableWithData() {
+    // debugger;
     if (productList.length === 0) {
       document.getElementById("data").innerHTML = `
       <table cellspacing="0">
@@ -67,14 +68,16 @@ function renderData() {
         </thead>
 
         <tbody>
-          ${productList.map((product, idx) => {
-            return `<tr>
+          ${productList
+            .map((product, idx) => {
+              return `<tr>
             <td>${idx + 1}</td>
             <td>${product.name}</td>            
             <td>Rs. ${product.price}</td>            
             <td>${product.reviews}</td>            
             </tr>`;
-          })}
+            })
+            .join(" ")}
         </tbody>
       </table>
       `;
