@@ -1,3 +1,5 @@
+import { sum } from "./math.js";
+
 var productList = [];
 
 function loadProducts(foo) {
@@ -88,3 +90,19 @@ function renderData() {
 }
 
 renderData();
+
+var arr = [1, 2, 3, 4, 5, 6, 7, 8];
+var total = sum(arr);
+
+// type is used for Babel to understand that it is jsx
+// create react VDOM using reactDOM
+// var app = document.getElementById("reactapp");
+// var root = ReactDOM.createRoot(app);
+// root.render(<h1>Introduction to React ${total}</h1>);
+// inside root.render is jsx, ans that h1 is NOT AN HTML TAG
+// (jsx -> javascript expression)
+// for browser to understand this, we need a
+// transpiler, ex. Babel, to consert jsx into
+// regular js aand html, add cdn of babel,
+
+console.log(total);

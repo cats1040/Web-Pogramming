@@ -28,3 +28,8 @@ table > thead > tr > th {
 table > tbody > tr > td {
   padding: 1em;
 }
+
+footer {
+  text-align: center;
+  background-color: antiquewhite;
+}

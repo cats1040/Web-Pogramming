@@ -12,8 +12,10 @@
     <link rel="stylesheet" href="./css/styles.css" />
 
     <!-- defer -> downloads JS first, is executed in the end, non-blocking mode -->
-    <script src="script.js" defer></script>
+    <!-- <script type="text/jsx" src="script.js" defer></script> -->
+    <script type="module" src="script.js" defer></script>
     <script src="data.js" async></script>
+    <script type="text/jsx" src="rscript.js"></script>
 
     <!-- async -> downloads JS first, is executed as soon as it is downloaded  -->
     <!-- <script src="script.js" defer></script> -->
@@ -40,20 +42,7 @@
     <div class="container">
       <div id="data"></div>
 
-      <div id="reactapp">
-        <script type="text/jsx">
-          // type is used for Babel to understand that it is jsx
-          var app = document.getElementById("reactapp");
-          // create react VDOM using reactDOM
-          var root = ReactDOM.createRoot(app);
-          root.render(<h1>HELLO WORLD</h1>);
-          // inside root.render is jsx, ans that h1 is NOT AN HTML TAG
-          // (jsx -> javascript expression)
-          // for browser to understand this, we need a
-          // transpiler, ex. Babel, to consert jsx into
-          // regular js aand html, add cdn of babel,
-        </script>
-      </div>
+      <div id="reactapp"></div>
     </div>
   </body>
 </html>
