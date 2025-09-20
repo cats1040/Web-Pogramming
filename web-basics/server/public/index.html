@@ -23,12 +23,37 @@
 
     <script src="constructor-functions.js"></script>
     <script src="rest-spread.js"></script>
+
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
   </head>
   <body>
     <header>Products</header>
     <br />
     <div class="container">
       <div id="data"></div>
+
+      <div id="reactapp">
+        <script type="text/jsx">
+          // type is used for Babel to understand that it is jsx
+          var app = document.getElementById("reactapp");
+          // create react VDOM using reactDOM
+          var root = ReactDOM.createRoot(app);
+          root.render(<h1>HELLO WORLD</h1>);
+          // inside root.render is jsx, ans that h1 is NOT AN HTML TAG
+          // (jsx -> javascript expression)
+          // for browser to understand this, we need a
+          // transpiler, ex. Babel, to consert jsx into
+          // regular js aand html, add cdn of babel,
+        </script>
+      </div>
     </div>
   </body>
 </html>
