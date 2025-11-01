@@ -1,7 +1,6 @@
-"use client";
+// "use client";
 
-import Link from "next/link";
-import { useEffect } from "react";
+import styles from "./login.module.css";
 
 export default function Login() {
   // this is rendered on server-side,
@@ -19,7 +18,7 @@ export default function Login() {
 
   return (
     <div style={{ width: "100vw" }}>
-      <h1>Login Page 🔐</h1>
+      <h1 style={{ textAlign: "center" }}>Login Page 🔐</h1>
       {/* <a href="/">Go back home</a> */}
       <form
         action="/api/login"
@@ -31,10 +30,17 @@ export default function Login() {
           alignItems: "center",
         }}
       >
-        <input type="email" name="email" placeholder="Email" required />
+        <input
+          className={styles.input}
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+        />
         <br />
         <input
           type="password"
+          className={styles.input}
           name="password"
           placeholder="Password"
           required
@@ -43,7 +49,6 @@ export default function Login() {
 
         <button type="submit">Login</button>
       </form>
-      <Link href="/">Go back home</Link>
     </div>
   );
 }

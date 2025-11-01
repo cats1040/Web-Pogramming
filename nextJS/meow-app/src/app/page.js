@@ -1,7 +1,16 @@
 import Link from "next/link";
 import ProductsList from "./components/productsList";
 
-export default function Home() {
+export default async function Home() {
+  function sleep(ms) {
+    // Nodejs also has setTimeout in global scope
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  await sleep(1000); // simulate loading
+
+  console.log("Home Page Rendered");
+
   const products = [
     {
       id: "p1",
@@ -42,7 +51,7 @@ export default function Home() {
 
   return (
     <>
-      <h1>Meow App 🐱</h1>
+      <h1 style={{ textAlign: "center" }}>Meow App 🐱</h1>
       <ProductsList products={products} />
     </>
   );

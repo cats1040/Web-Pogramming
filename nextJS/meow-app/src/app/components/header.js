@@ -4,10 +4,11 @@ function Header() {
   return (
     <header
       style={{
-        width: "100%",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        borderBottom: "1px solid #ccc",
+        padding: "1rem",
       }}
     >
       <Link href="/">Meow App</Link>

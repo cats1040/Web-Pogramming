@@ -1,11 +1,16 @@
+@import "tailwindcss";
+
 body {
-  padding: 10px;
+  margin: 0;
 }
 
 a {
   color: rgb(0, 0, 0);
-  background-color: cadetblue;
   font-weight: 900;
   text-transform: uppercase;
   text-decoration: none;
+}
+
+li {
+  text-transform: uppercase;
 }
