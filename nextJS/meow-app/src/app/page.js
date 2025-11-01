@@ -43,7 +43,6 @@ export default function Home() {
   return (
     <>
       <h1>Meow App 🐱</h1>
-      <Link href="/login">Login</Link>
       <ProductsList products={products} />
     </>
   );
