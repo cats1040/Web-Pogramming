@@ -1,7 +1,11 @@
 import Link from "next/link";
 import ProductsList from "./components/productsList";
 
+export const revalidate = 10;
+
 export default async function Home() {
+  // --- simulate api call behavior with a delay ---
+
   function sleep(ms) {
     // Nodejs also has setTimeout in global scope
     return new Promise((resolve) => setTimeout(resolve, ms));

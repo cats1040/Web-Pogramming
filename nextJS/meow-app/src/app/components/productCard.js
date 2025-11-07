@@ -1,3 +1,5 @@
+import Button from "./button";
+
 function ProductCard({ product }) {
   return (
     <div
@@ -7,6 +9,8 @@ function ProductCard({ product }) {
       <h3>{product.name}</h3>
       <p>{product.description}</p>
       <p>${product.price}</p>
+      <Button variant="primary">Add to Cart</Button>
+      {/* Add to cart is children in button.js */}
     </div>
   );
 }
