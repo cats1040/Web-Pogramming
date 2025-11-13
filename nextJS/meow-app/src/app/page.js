@@ -1,7 +1,9 @@
 import Link from "next/link";
 import ProductsList from "./components/productsList";
+import Button from "./components/button";
 
-export const revalidate = 10;
+// Cache revalidation / Disable caching
+export const revalidate = 60;
 
 export default async function Home() {
   // --- simulate api call behavior with a delay ---
@@ -57,6 +59,17 @@ export default async function Home() {
     <>
       <h1 style={{ textAlign: "center" }}>Meow App 🐱</h1>
       <ProductsList products={products} />
+      <section className="border-2 border-solid py-8">
+        <div className="max-w-6xl mx-auto text-center px-4">
+          <h2 className="text-4xl font-bold mb-4">
+            Discover the Best Deals Online
+          </h2>
+          <p className="text-lg text-gray-600 mb-6">
+            Shop thousands of products from top brands at unbeatable prices.
+          </p>
+        </div>
+        <Button variant="primary">Button</Button>
+      </section>
     </>
   );
 }
