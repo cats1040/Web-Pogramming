@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ProductsList from "./components/productsList";
 import Button from "./components/button";
+import { sleep } from "./common/utils/helpers";
 
 // Cache revalidation / Disable caching
 export const revalidate = 60;
@@ -8,52 +9,58 @@ export const revalidate = 60;
 export default async function Home() {
   // --- simulate api call behavior with a delay ---
 
-  function sleep(ms) {
-    // Nodejs also has setTimeout in global scope
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   await sleep(1000); // simulate loading
 
   console.log("Home Page Rendered");
+  // -----------------------------------------------
 
-  const products = [
-    {
-      id: "p1",
-      name: "Product 1",
-      price: 10,
-      description: "This is product 1",
-      image: "https://placehold.co/300x200",
+  const productsFromJServer = await fetch("http://localhost:5000/products", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "",
     },
-    {
-      id: "p2",
-      name: "Product 2",
-      price: 20,
-      image: "https://placehold.co/300x200",
-      description: "This is product 2",
-    },
-    {
-      id: "p3",
-      name: "Product 3",
-      price: 30,
-      image: "https://placehold.co/300x200",
-      description: "This is product 3",
-    },
-    {
-      id: "p4",
-      name: "Product 4",
-      price: 40,
-      image: "https://placehold.co/300x200",
-      description: "This is product 4",
-    },
-    {
-      id: "p5",
-      name: "Product 5",
-      price: 50,
-      image: "https://placehold.co/300x200",
-      description: "This is product 5",
-    },
-  ];
+  });
+  const products = await productsFromJServer.json();
+  console.log("------------Fetched products from server ", products);
+
+  // const products = [
+  //   {
+  //     id: "p1",
+  //     name: "Product 1",
+  //     price: 10,
+  //     description: "This is product 1",
+  //     image: "https://placehold.co/300x200",
+  //   },
+  //   {
+  //     id: "p2",
+  //     name: "Product 2",
+  //     price: 20,
+  //     image: "https://placehold.co/300x200",
+  //     description: "This is product 2",
+  //   },
+  //   {
+  //     id: "p3",
+  //     name: "Product 3",
+  //     price: 30,
+  //     image: "https://placehold.co/300x200",
+  //     description: "This is product 3",
+  //   },
+  //   {
+  //     id: "p4",
+  //     name: "Product 4",
+  //     price: 40,
+  //     image: "https://placehold.co/300x200",
+  //     description: "This is product 4",
+  //   },
+  //   {
+  //     id: "p5",
+  //     name: "Product 5",
+  //     price: 50,
+  //     image: "https://placehold.co/300x200",
+  //     description: "This is product 5",
+  //   },
+  // ];
 
   return (
     <>
