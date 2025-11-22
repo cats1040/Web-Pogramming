@@ -43,11 +43,8 @@ app.post("/products", (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    const currentData = JSON.parse(data);
-    const products = currentData.products;
-    const updatedProducts = [...products, newProduct];
 
-    currentData.products = updatedProducts;
+    const currentData = JSON.parse(data).products.push(newProduct);
 
     fileSystem.writeFile(
       "./db.json",
@@ -83,11 +80,12 @@ app.put("/products/:id", (req, res) => {
     // find product index
     const index = products.findIndex((p) => p.id == id);
 
-    if (index == -1) {
+    if (index === -1) {
       return res.status(404).json({ error: "Product not found" });
     }
 
     // update product
+    // data not sanitized
     products[index] = { ...products[index], ...updatedData };
 
     // save back to file
@@ -108,6 +106,16 @@ app.put("/products/:id", (req, res) => {
     );
   });
 });
+
+// Sample Input: localhost:5000/products?id=3
+// app.put("/products", (req, res) => {
+//   // Update product by ID
+//   let queryParams = req.query;
+//   let body = req.body;
+
+//   console.log("Params:", queryParams);
+//   console.log("Body:", body);
+// });
 
 app.delete("/products/:id", (req, res) => {
   const { id } = req.params;
