@@ -7,6 +7,7 @@ var fileSystem = require("fs");
 var port = 5000;
 
 var bodyParser = require("body-parser");
+const { stringify } = require("querystring");
 app.use(bodyParser.json()); // to process incoming post requests to json (high level)
 
 app.get("/", (req, res) => {
@@ -61,6 +62,89 @@ app.post("/products", (req, res) => {
         console.log("db.json file updated successfully");
         res.status(201).json({ message: "Product created successfully" });
         return;
+      }
+    );
+  });
+});
+
+app.put("/products/:id", (req, res) => {
+  const { id } = req.params;
+  const updatedData = req.body;
+
+  fileSystem.readFile("./db.json", "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading db.json", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    const currentData = JSON.parse(data);
+    const products = currentData.products;
+
+    // find product index
+    const index = products.findIndex((p) => p.id == id);
+
+    if (index == -1) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // update product
+    products[index] = { ...products[index], ...updatedData };
+
+    // save back to file
+    fileSystem.writeFile(
+      "./db.json",
+      JSON.stringify(currentData, null, 2),
+      (err) => {
+        if (err) {
+          console.error("Error writing db.json");
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        return res.json({
+          message: "Product updated successfully",
+          updatedProduct: products[index],
+        });
+      }
+    );
+  });
+});
+
+app.delete("/products/:id", (req, res) => {
+  const { id } = req.params;
+
+  fileSystem.readFile("./db.json", "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading db.json", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    const currentData = JSON.parse(data);
+    const products = currentData.products;
+
+    // find product index
+    const index = products.findIndex((p) => p.id == id);
+
+    if (index == -1) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // update products
+    products.splice(index, 1);
+
+    // save back to file
+    fileSystem.writeFile(
+      "./db.json",
+      JSON.stringify(currentData, null, 2),
+      (err) => {
+        if (err) {
+          console.error("Error writing db.json");
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        return res.json({
+          message: "Product removed successfully",
+          removedProduct: products[index],
+        });
       }
     );
   });

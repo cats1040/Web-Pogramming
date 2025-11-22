@@ -15,18 +15,18 @@
       "description": "This is product 5"
     },
     {
-      "id": "p5",
+      "id": "p6",
       "name": "Product 5",
       "price": 50,
       "image": "https://placehold.co/300x200",
       "description": "This is product 5"
     },
     {
-      "id": "p5",
-      "name": "Product 5",
+      "id": "p9",
+      "name": "Product 9",
       "price": 50,
       "image": "https://placehold.co/300x200",
-      "description": "This is product 5"
+      "description": "This is product 9"
     }
   ]
 }
