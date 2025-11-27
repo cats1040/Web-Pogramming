@@ -10,6 +10,17 @@ var bodyParser = require("body-parser");
 const { stringify } = require("querystring");
 app.use(bodyParser.json()); // to process incoming post requests to json (high level)
 
+app.use("/*splat", (req, res, next) => {
+  // Allow CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
 app.get("/", (req, res) => {
   res.end("Hello world\n");
 });
@@ -44,7 +55,8 @@ app.post("/products", (req, res) => {
       return;
     }
 
-    const currentData = JSON.parse(data).products.push(newProduct);
+    const currentData = JSON.parse(data);
+    currentData.products.push(newProduct);
 
     fileSystem.writeFile(
       "./db.json",

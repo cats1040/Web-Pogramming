@@ -23,6 +23,7 @@ function Header() {
         <li>Home</li>
         <li>Products</li>
         <Link href="/login">Login</Link>
+        <Link href="/addProduct">Add Product</Link>
       </ul>
     </header>
   );
