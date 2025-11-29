@@ -3,6 +3,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import productsRoutes from "./routes/products.js";
 
+import "./config/dbConnection.js";
+
 var app = express();
 var port = 5000;
 
