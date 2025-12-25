@@ -1,21 +1,25 @@
 import express, { Router } from "express";
+import ProductModel from "../models/products.js";
 
 const router = express.Router();
 
 import fileSystem from "fs";
 
-router.get("/", (req, res) => {
-  fileSystem.readFile("./db.json", "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading db.json file:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
-    const currentData = JSON.parse(data);
-    const products = currentData.products;
-    console.log(products);
-    res.json(products);
-  });
+router.get("/", async (req, res) => {
+  const products = await ProductModel.getAllProducts();
+  res.json(products);
+
+  // fileSystem.readFile("./db.json", "utf8", (err, data) => {
+  //   if (err) {
+  //     console.error("Error reading db.json file:", err);
+  //     res.status(500).json({ error: "Internal Server Error" });
+  //     return;
+  //   }
+  //   const currentData = JSON.parse(data);
+  //   const products = currentData.products;
+  //   console.log(products);
+  //   res.json(products);
+  // });
 });
 
 router.post("/", (req, res) => {
@@ -27,32 +31,38 @@ router.post("/", (req, res) => {
     res.status(400).json({ error: "Invalid product data" });
   }
 
-  fileSystem.readFile("./db.json", "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading db.json file:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
-
-    const currentData = JSON.parse(data);
-    currentData.products.push(newProduct);
-
-    fileSystem.writeFile(
-      "./db.json",
-      JSON.stringify(currentData),
-      (err, data) => {
-        if (err) {
-          console.error("Error writing to db.json file:", err);
-          res.status(500).json({ error: "Internal Server Error" });
-          return;
-        }
-
-        console.log("db.json file updated successfully");
-        res.status(201).json({ message: "Product created successfully" });
-        return;
-      }
-    );
+  productsRoutes.addNewProduct(newProduct).then((createdProduct) => {
+    res
+      .status(201)
+      .json({ message: "Product created successfully", createdProduct });
   });
+
+  // fileSystem.readFile("./db.json", "utf8", (err, data) => {
+  //   if (err) {
+  //     console.error("Error reading db.json file:", err);
+  //     res.status(500).json({ error: "Internal Server Error" });
+  //     return;
+  //   }
+
+  //   const currentData = JSON.parse(data);
+  //   currentData.products.push(newProduct);
+
+  //   fileSystem.writeFile(
+  //     "./db.json",
+  //     JSON.stringify(currentData),
+  //     (err, data) => {
+  //       if (err) {
+  //         console.error("Error writing to db.json file:", err);
+  //         res.status(500).json({ error: "Internal Server Error" });
+  //         return;
+  //       }
+
+  //       console.log("db.json file updated successfully");
+  //       res.status(201).json({ message: "Product created successfully" });
+  //       return;
+  //     }
+  //   );
+  // });
 });
 
 router.put("/:id", (req, res) => {
