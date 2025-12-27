@@ -8,49 +8,45 @@ function AddProduct() {
   const priceRef = useRef(null);
   const descRef = useRef(null);
   const imageurlRef = useRef(null);
+  const categoryRef = useRef(null);
+  const stockRef = useRef(null);
 
-  const submitHandler = (e) => {
-    console.log("Form Submitted");
-
-    // e.preventDefault();
-
-    // very expensive queries
-    // solution - useRef
-    // const name = document.getElementById("name").value;
-    // const price = document.getElementById("price").value;
-    // const desc = document.getElementById("desc").value;
-    // const imageurl = document.getElementById("imageurl").value;
-
-    const name = nameRef.current.value;
-    const price = priceRef.current.value;
-    const desc = descRef.current.value;
-    const imageurl = imageurlRef.current.value;
-
-    console.log({ name, price, desc, imageurl });
+  const submitHandler = async (e) => {
+    e.preventDefault(); // Prevent page reload
 
     const newProduct = {
-      id: Math.random().toString(),
-      name: name,
-      price: parseFloat(price),
-      description: desc,
-      image: imageurl,
+      name: nameRef.current.value,
+      price: parseFloat(priceRef.current.value),
+      description: descRef.current.value,
+      image: imageurlRef.current.value,
+      category: categoryRef.current.value,
+      stock: parseInt(stockRef.current.value),
     };
 
-    fetch("http://localhost:5000/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((response) => {
-        console.log("Response received from server for new product ", response);
-        window.alert("Product added successfully!");
-      })
-      .catch((error) => {
-        console.error("Error occurred while adding new product ", error);
-        window.alert("Failed to add product. Please try again.");
+    try {
+      const response = await fetch("http://localhost:5000/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newProduct),
       });
+
+      if (response.ok) {
+        window.alert("Product added successfully!");
+        nameRef.current.value = "";
+        priceRef.current.value = "";
+        descRef.current.value = "";
+        imageurlRef.current.value = "";
+        categoryRef.current.value = "";
+        stockRef.current.value = "";
+      } else {
+        const errText = await response.text();
+        console.error("Error adding product:", errText);
+        window.alert("Failed to add product. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      window.alert("Failed to add product. Please try again.");
+    }
   };
 
   return (
@@ -71,32 +67,32 @@ function AddProduct() {
 
       <form
         className="max-w-md mx-auto"
-        style={{
-          width: "400px",
-        }}
+        style={{ width: "400px" }}
+        onSubmit={submitHandler}
       >
+        {/* Product Name */}
         <div className="relative z-0 w-full mb-5 group">
           <input
             ref={nameRef}
             type="text"
-            name="name"
             id="name"
             className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
-            placeholder=""
+            placeholder=" "
             required
           />
           <label
             htmlFor="name"
-            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >
             Product Name
           </label>
         </div>
+
+        {/* Price */}
         <div className="relative z-0 w-full mb-5 group">
           <input
             ref={priceRef}
             type="number"
-            name="price"
             id="price"
             className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
             placeholder=" "
@@ -104,16 +100,16 @@ function AddProduct() {
           />
           <label
             htmlFor="price"
-            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >
             Price
           </label>
         </div>
+
+        {/* Description */}
         <div className="relative z-0 w-full mb-5 group">
-          <input
+          <textarea
             ref={descRef}
-            type="description"
-            name="desc"
             id="desc"
             className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
             placeholder=" "
@@ -121,31 +117,67 @@ function AddProduct() {
           />
           <label
             htmlFor="desc"
-            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >
             Description
           </label>
         </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <input
-              ref={imageurlRef}
-              type="text"
-              name="imageurl"
-              id="imageurl"
-              className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
-              placeholder=" "
-              required
-            />
-            <label
-              htmlFor="imageurl"
-              className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
-            >
-              Image URL
-            </label>
-          </div>
+
+        {/* Image URL */}
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            ref={imageurlRef}
+            type="text"
+            id="imageurl"
+            className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+            placeholder=" "
+            required
+          />
+          <label
+            htmlFor="imageurl"
+            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          >
+            Image URL
+          </label>
         </div>
-        <Button type="submit" variant="yellow" onClick={submitHandler}>
+
+        {/* Category */}
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            ref={categoryRef}
+            type="text"
+            id="category"
+            className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+            placeholder=" "
+            required
+          />
+          <label
+            htmlFor="category"
+            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          >
+            Category
+          </label>
+        </div>
+
+        {/* Stock */}
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            ref={stockRef}
+            type="number"
+            id="stock"
+            className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+            placeholder=" "
+            required
+          />
+          <label
+            htmlFor="stock"
+            className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          >
+            Stock
+          </label>
+        </div>
+
+        <Button type="submit" variant="yellow">
           Add Product
         </Button>
       </form>
