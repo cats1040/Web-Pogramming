@@ -1,7 +1,8 @@
-// "use client";
+"use client";
 
 import Button from "../components/button";
 import styles from "./login.module.css";
+import { useRef } from "react";
 
 export default function Login() {
   // this is rendered on server-side,
@@ -15,7 +16,35 @@ export default function Login() {
   //   localStorage.setItem("token", "newToken");
   // }, []);
 
-  const loginHandler = (e) => {};
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const loginSubmitHandler = async (e) => {
+    e.preventDefault(); // prevent page reload
+    const user = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/users/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (response.ok) {
+        alert("User loggedin successfully!");
+      } else {
+        alert("Failed to login user");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong");
+    }
+  };
 
   return (
     <div style={{ width: "100vw" }}>
@@ -23,7 +52,7 @@ export default function Login() {
         Login Page
       </h1>
 
-      <form className="max-w-sm mx-auto">
+      <form onSubmit={loginSubmitHandler} className="max-w-sm mx-auto">
         <div className="mb-5">
           <label
             htmlFor="email"
@@ -34,6 +63,7 @@ export default function Login() {
           <input
             type="email"
             id="email"
+            ref={emailRef}
             className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
             placeholder="name@flowbite.com"
             required
@@ -49,38 +79,18 @@ export default function Login() {
           <input
             type="password"
             id="password"
+            ref={passwordRef}
             className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
             placeholder="••••••••"
             required
           />
         </div>
-        <label htmlFor="remember" className="flex items-start mb-5">
-          <input
-            id="remember"
-            type="checkbox"
-            value=""
-            className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft"
-            required
-          />
-          <p className="ms-2 text-sm font-medium text-heading select-none">
-            I agree with the{" "}
-            <a href="#" className="text-fg-brand hover:underline">
-              terms and conditions
-            </a>
-            .
-          </p>
-        </label>
-        <button
-          type="submit"
-          className="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
-        >
-          Submit
-        </button>
+        <div className="text-center mt-4">
+          <Button variant="primary" onClick={loginSubmitHandler}>
+            Login Button
+          </Button>
+        </div>
       </form>
-
-      <div className="text-center mt-4">
-        <Button variant="primary">Login Button</Button>
-      </div>
     </div>
   );
 }
